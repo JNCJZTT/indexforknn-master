@@ -1,50 +1,55 @@
 package com.index.indexforknn.base.service.api;
 
+import com.index.indexforknn.base.domain.Node;
+import com.index.indexforknn.base.domain.Vertex;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
 import com.index.indexforknn.base.service.dto.IndexDTO;
-import com.index.indexforknn.base.service.factory.VariableServiceFactory;
+import com.index.indexforknn.base.service.factory.ServiceFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
- * TODO
+ * IVariableService
  * 2022/3/12 zhoutao
  */
 @Service
-public interface IVariableService {
+public interface IVariableService extends IBaseService {
 
     /**
-     * 初始化变量
+     * init variables
      */
     void initVariable(IndexDTO index);
 
     /**
-     * 构建结点
+     * build vertex
      */
     void buildVertex(int vertexName, String clusterName);
 
     /**
-     * 构建边
+     * build edge
      */
     void buildEdge(int vertexName, String edgeInfo[]);
 
     /**
-     * 获得结点的数量
+     * get Vertex Size
      */
     int getVertexSize();
 
     /**
-     * 获得子图的数量
+     * get cluster size
      */
     int getClusterSize();
 
+    /**
+     * get vertices
+     */
     List getVertices();
 
     IndexType supportType();
 
     default void register() {
-        VariableServiceFactory.register(supportType(), this);
+        ServiceFactory.register(supportType(), this);
     }
 
 }

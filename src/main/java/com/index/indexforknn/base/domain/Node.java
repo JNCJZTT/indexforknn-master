@@ -2,17 +2,19 @@ package com.index.indexforknn.base.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
 
 /**
- * TODO
+ * Node
  * 2022/2/12 zhoutao
  */
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Node {
     private int name;
 
@@ -23,7 +25,8 @@ public class Node {
     }
 
     /**
-     * 重写hashCode和equals函数，Node之间只要name相同则视为同一个Node
+     * Rewrite the hashCode and equals functions,
+     * as long as the names between Nodes are the same, they are regarded as the same Node
      */
     @Override
     public int hashCode() {

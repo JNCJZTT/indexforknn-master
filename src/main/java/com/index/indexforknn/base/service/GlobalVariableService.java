@@ -1,24 +1,29 @@
 package com.index.indexforknn.base.service;
 
+import com.index.indexforknn.ahg.domain.AhgVariable;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.enumeration.Distribution;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
 import com.index.indexforknn.base.domain.enumeration.MapInfo;
 import com.index.indexforknn.base.service.dto.IndexDTO;
+import com.index.indexforknn.base.service.dto.KnnDTO;
+import com.index.indexforknn.base.service.knn.DijkstraService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
 /**
- * TODO
+ * GlobalVariableService
  * 2022/3/26 zhoutao
  */
 @Service
 @Slf4j
 public class GlobalVariableService {
+
     /**
-     * 初始化全局变量
+     * init global variables
      */
     public void initGlobalVariable(IndexDTO index) {
         GlobalVariable.BRANCH = index.getBranch();
@@ -28,12 +33,12 @@ public class GlobalVariableService {
         GlobalVariable.VERTEX_NUM = GlobalVariable.MAP_INFO.getSize();
         GlobalVariable.DISTRIBUTE = Distribution.valueOf(index.getDistribution());
         GlobalVariable.CAR_NUM = index.getCarNum();
-        // 初始化文件路径
+        // init file path
         initFileUrl();
     }
 
     /**
-     * 初始化文件路径
+     * init file path
      */
     private void initFileUrl() {
         String mapName = GlobalVariable.MAP_INFO.name();
@@ -51,4 +56,10 @@ public class GlobalVariableService {
         log.info("carUrl={}", GlobalVariable.carUrl);
     }
 
+    /**
+     * init knn variables
+     */
+    public void initKnnVariable(KnnDTO knnDTO) {
+        GlobalVariable.K = knnDTO.getK();
+    }
 }

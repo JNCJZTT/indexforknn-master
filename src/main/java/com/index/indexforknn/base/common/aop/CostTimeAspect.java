@@ -1,7 +1,7 @@
 package com.index.indexforknn.base.common.aop;
 
 import com.index.indexforknn.base.domain.annotation.CostTime;
-import com.index.indexforknn.base.domain.enumeration.TimeType;
+import com.index.indexforknn.base.domain.enumeration.UnitType;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -50,7 +50,7 @@ public class CostTimeAspect {
             obj = joinPoint.proceed();
             long endTime = System.nanoTime();
             // 运行完成后
-            TimeType timeType = costTime.timeType();
+            UnitType timeType = costTime.timeType();
 
             log.info(costTime.msg() + "=" + String.format("%.2f",
                     (((float) (endTime - startTime)) / timeType.getQuantity())

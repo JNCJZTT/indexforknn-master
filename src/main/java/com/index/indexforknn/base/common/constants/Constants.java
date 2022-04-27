@@ -1,13 +1,16 @@
 package com.index.indexforknn.base.common.constants;
 
 /**
- * TODO
+ * Constants
  * 2022/2/11 zhoutao
  */
 public interface Constants {
-    // 基本路径
+    // base path
     String BASE_URL = "/Users/zhoutao/Documents/kNNIndexData/";
 
-    // 正态分布的中心占比
+    // The proportion of the center of the normal distribution
     double NORMAL_PER = 0.7;
+
+    // car speed
+    int carSpeed = 60_000 / 3600;
 }

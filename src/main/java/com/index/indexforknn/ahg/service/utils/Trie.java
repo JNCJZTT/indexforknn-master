@@ -4,7 +4,7 @@ import com.index.indexforknn.ahg.common.AhgConstants;
 import com.index.indexforknn.base.domain.GlobalVariable;
 
 /**
- * Trie树来判断子图是否已被处理过
+ * Trie tree
  * 2022/4/15 zhoutao
  */
 public class Trie {
@@ -16,6 +16,11 @@ public class Trie {
         isEnd = false;
     }
 
+    /**
+     * insert Trie tree
+     *
+     * @param clusterName clusterName
+     */
     public void insert(String clusterName) {
         Trie node = this;
         String[] str = clusterName.split(AhgConstants.CLUSTER_NAME_SUFFIX);
@@ -29,6 +34,12 @@ public class Trie {
         node.isEnd = true;
     }
 
+    /**
+     * Trie tree contains clusterName
+     *
+     * @param clusterName clusterName
+     * @return result
+     */
     public boolean isProcessed(String clusterName) {
         Trie node = this;
         String[] str = clusterName.split(AhgConstants.CLUSTER_NAME_SUFFIX);

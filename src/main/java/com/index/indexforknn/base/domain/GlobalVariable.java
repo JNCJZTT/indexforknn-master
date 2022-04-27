@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * 全局变量
+ * GlobalVariable
  * 2022/2/11 zhoutao
  */
 @Component
@@ -22,27 +22,31 @@ import java.util.Random;
 public class GlobalVariable {
     public static final Random RANDOM = new Random();
 
-    // 节点数量
+    // vertex num
     public static int VERTEX_NUM;
 
-    // 划分的每个子图的大小
+    // the max vertex num in sub-graph
     public static int SUB_GRAPH_SIZE;
 
-    // 索引的类型
+    // index type
     public static IndexType INDEX_TYPE;
 
-    // 分支数
+    // branch
     public static int BRANCH;
 
-    // 地图
+    // map
     public static MapInfo MAP_INFO;
 
-    // 分布
+    // distribute
     public static Distribution DISTRIBUTE;
 
-    // 移动对象数量
+    // k
+    public static int K;
+
+    // car-num
     public static int CAR_NUM;
 
+    // cars
     public static List<Car> CARS;
 
     public static String vertexUrl = Constants.BASE_URL + "{0}/USA-road-d.{0}.branch-{1}.avg-{2}.txt";

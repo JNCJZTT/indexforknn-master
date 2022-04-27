@@ -1,11 +1,11 @@
 package com.index.indexforknn.base.domain.annotation;
 
-import com.index.indexforknn.base.domain.enumeration.TimeType;
+import com.index.indexforknn.base.domain.enumeration.UnitType;
 
 import java.lang.annotation.*;
 
 /**
- * TODO
+ * CostTime
  * 2022/2/16 zhoutao
  */
 @Target({ElementType.METHOD})
@@ -13,5 +13,5 @@ import java.lang.annotation.*;
 public @interface CostTime {
     String msg();
 
-    TimeType timeType();
+    UnitType timeType();
 }

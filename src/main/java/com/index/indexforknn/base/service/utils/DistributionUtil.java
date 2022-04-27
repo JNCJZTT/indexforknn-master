@@ -1,32 +1,34 @@
 package com.index.indexforknn.base.service.utils;
 
-import com.index.indexforknn.ahg.domain.AhgVertex;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.Vertex;
 import com.index.indexforknn.base.domain.enumeration.Distribution;
-import com.index.indexforknn.base.domain.enumeration.TimeType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 /**
- * TODO
+ * DistributionUtil
  * 2022/2/15 zhoutao
  */
 @Slf4j
 @Component
 public class DistributionUtil {
-    // 正态分布的中心占比
+    /**
+     * The proportion of the center of the normal distribution
+     */
     private static final double NORMAL_PER = 0.65;
 
-    // 最少的结点分类
+    /**
+     * the least types of vertices
+     */
     private static final double MIN_VERTICES = 100;
-
-    // 已构建过的分布（国际化变量重置时，需同步重置）
+    /**
+     * The built distribution
+     * (when the internationalization variable is reset, it needs to be reset synchronously)
+     */
     private Set<Distribution> builtDistributions = new HashSet<>();
-
-//    private static List<Integer> degree;
 
     private static int startIndex;
 
@@ -39,11 +41,11 @@ public class DistributionUtil {
     }
 
     /**
-     * 初始化分布（随机、正态、Zip）
+     * Initialize distribution (random, normal, Zip)
      */
     public void initDistribute(List vertices) {
         if (builtDistributions.contains(GlobalVariable.DISTRIBUTE)) {
-            log.info("分布已构建完成");
+            log.info("Distribution has built");
             return;
         }
 
@@ -71,7 +73,6 @@ public class DistributionUtil {
             }
         }
 
-        long startTime = System.nanoTime();
         int maxDegree = degreeList.size();
 
         if (GlobalVariable.DISTRIBUTE.equals(Distribution.NORMAL)) {
@@ -109,11 +110,12 @@ public class DistributionUtil {
         }
 
         builtDistributions.add(GlobalVariable.DISTRIBUTE);
-        log.info(TimeUtil.formatTime("构建分布时间", TimeType.microseconds, startTime));
     }
 
     /**
-     * 获取该分布下的随机结点
+     * get Vertex name
+     *
+     * @return vertex name based on distribution
      */
     public static int getVertexName() {
         if (GlobalVariable.DISTRIBUTE.equals(Distribution.RANDOM)) {

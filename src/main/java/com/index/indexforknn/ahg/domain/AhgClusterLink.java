@@ -7,13 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
- * TODO
+ * AhgClusterLink
  * 2022/2/12 zhoutao
  */
 @Slf4j
 @Getter
 public class AhgClusterLink {
-    private Map<Integer, List<Integer>> clusterLinkMap;
+    private Map<Integer, Integer> clusterLinkMap;
 
     private Set<Node> borderLink;
 
@@ -23,20 +23,20 @@ public class AhgClusterLink {
     }
 
     /**
-     * 添加子图内部边
+     * addClusterLink
      *
-     * @param to  邻居节点
-     * @param dis 距离
+     * @param to  to
+     * @param dis dis
      */
     public void addClusterLink(Integer to, Integer dis) {
-        if (clusterLinkMap.containsKey(to)) {
-            clusterLinkMap.get(to).set(0, dis);
-        } else {
-            clusterLinkMap.put(to, Arrays.asList(dis));
-        }
+        clusterLinkMap.put(to, dis);
     }
 
     public void addBorderLink(Node node) {
+        borderLink.add(node);
+    }
+
+    public void addActiveLink(Node node) {
         borderLink.add(node);
     }
 
@@ -48,7 +48,7 @@ public class AhgClusterLink {
         if (!clusterLinkMap.containsKey(to)) {
             return -1;
         }
-        return clusterLinkMap.get(to).get(0);
+        return clusterLinkMap.get(to);
     }
 
 

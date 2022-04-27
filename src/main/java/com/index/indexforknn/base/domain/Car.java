@@ -2,32 +2,49 @@ package com.index.indexforknn.base.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.util.Comparator;
 
 /**
- * TODO
+ * Moving objects
  * 2022/2/16 zhoutao
  */
 @Getter
 @Setter
+@ToString
 @Accessors(chain = true)
 public class Car {
-    // 移动对象名称
+    // Car name
     private int name;
 
-    // 到活跃点的距离
+    /**
+     * the dis from car to active node
+     */
     private int activeDis;
 
-    // 到查询点距离
+    /**
+     * the dis from car to query node
+     */
     private int queryDis;
 
-    // 活跃点
+    /**
+     * active name
+     */
     private int active;
 
+    public void setQueryDis(int dis) {
+        queryDis = dis + activeDis;
+    }
+
+    public void setActiveInfo(Node node) {
+        active = node.getName();
+        activeDis = node.getDis();
+    }
+
     /**
-     * 对移动对象到兴趣点之间到距离进行排序
+     * Comprator based on activeDis
      */
     public static class ActiveDisComprator implements Comparator {
         @Override
@@ -37,12 +54,12 @@ public class Car {
     }
 
     /**
-     * 对移动对象到查询点之间到距离进行排序
+     * Comprator based on queryDis
      */
     public static class QueryDisComprator implements Comparator {
         @Override
         public int compare(Object object1, Object object2) {
-            return Integer.compare(((Car) object1).queryDis, ((Car) object2).queryDis);
+            return Integer.compare(((Car) object2).queryDis, ((Car) object1).queryDis);
         }
     }
 

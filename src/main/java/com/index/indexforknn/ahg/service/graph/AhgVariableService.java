@@ -4,7 +4,8 @@ import com.index.indexforknn.ahg.common.AhgConstants;
 import com.index.indexforknn.ahg.domain.AhgVariable;
 import com.index.indexforknn.ahg.domain.AhgCluster;
 import com.index.indexforknn.ahg.domain.AhgVertex;
-import com.index.indexforknn.ahg.service.utils.AhgUtil;
+import com.index.indexforknn.ahg.service.build.AhgClusterBuilder;
+import com.index.indexforknn.ahg.service.utils.AhgVariableUtil;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.Node;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
@@ -19,7 +20,7 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 
 /**
- * TODO
+ * AhgVariableService
  * 2022/2/11 zhoutao
  */
 @Slf4j
@@ -33,82 +34,63 @@ public class AhgVariableService implements IVariableService {
         register();
     }
 
-
+    @Override
     public void initVariable(IndexDTO ahgIndex) {
         AhgVariable.LEAST_ACTIVE_NUM = ahgIndex.getLeastActiveNum();
         AhgVariable.MOST_ACTIVE_NUM = AhgConstants.MULTIPLE_LEAST_ACTIVE_NUM * AhgVariable.LEAST_ACTIVE_NUM;
 
         AhgVariable.vertices = new ArrayList<>(GlobalVariable.MAP_INFO.getSize());
         AhgVariable.clusters = new HashMap<>(GlobalVariable.MAP_INFO.getSize() / ahgIndex.getSubGraphSize());
+
+        AhgVariable.DIGIT = String.valueOf(ahgIndex.getBranch()).length();
     }
 
-
-    /**
-     * 初始化AhgIndex变量
-     */
-//    public void initVariable(AhgIndexDTO ahgIndex) {
-//        // 初始化全局变量
-//        GlobalVariable.initGlobalVariable(ahgIndex);
-//
-//        AhgVariable.LEAST_ACTIVE_NUM = ahgIndex.getLeastActiveNum();
-//        AhgVariable.MOST_ACTIVE_NUM = AhgConstants.MULTIPLE_LEAST_ACTIVE_NUM * AhgVariable.LEAST_ACTIVE_NUM;
-//
-//        vertices = new ArrayList<>(GlobalVariable.MAP_INFO.getSize());
-//        clusters = new HashMap<>(GlobalVariable.MAP_INFO.getSize() / ahgIndex.getSubGraphSize());
-//    }
-
-
-    /**
-     * 创建结点，并将结点添加到叶子簇中
-     */
     @Override
     public void buildVertex(int vertexName, String clusterName) {
-        // 如果该簇还没创建，则创建该叶子簇
-        if (!AhgVariable.INSTANCE.containsClusterValue(clusterName)) {
-            AhgVariable.INSTANCE.addCluster(clusterName, new AhgCluster(clusterName, true));
+        // build leaf cluster
+        if (!AhgVariableUtil.containsClusterKey(clusterName)) {
+            AhgVariableUtil.addCluster(clusterName, AhgClusterBuilder.build(clusterName, true));
         }
 
-        // 创建结点
+        // build vertex
         AhgVertex vertex = new AhgVertex();
         vertex.setName(vertexName);
         vertex.setClusterName(clusterName);
+        AhgVariableUtil.addVertex(vertex);
 
-        // 添加结点，并将结点添加到叶子簇中去
-        AhgVariable.vertices.add(vertex);
-        AhgVariable.clusters.get(clusterName).addVertex(vertexName);
+        // add vertex into cluster
+        AhgVariableUtil.getCluster(clusterName).addVertex(vertexName);
     }
 
-    /**
-     * 构建边，添加原始道路与簇内和簇外的的边
-     */
     @Override
     public void buildEdge(int vertexName, String[] edgeInfo) {
-        AhgVertex vertex = AhgVariable.vertices.get(vertexName);
+        AhgVertex vertex = AhgVariableUtil.getVertex(vertexName);
         String clusterName = vertex.getClusterName();
-        AhgCluster cluster = AhgVariable.clusters.get(clusterName);
+        AhgCluster cluster = AhgVariableUtil.getCluster(clusterName);
 
         for (int j = 0; j < edgeInfo.length; j += 2) {
             int neighbor = Integer.parseInt(edgeInfo[j]), dis = Integer.parseInt(edgeInfo[j + 1]);
-            // 双向边，剪枝
+
+            // Only save one - way edge.
+            // Need to be modified if it is a directed graph
             if (neighbor < vertexName) continue;
 
-            AhgVertex neighborVertex = AhgVariable.vertices.get(neighbor);
+            AhgVertex neighborVertex = AhgVariableUtil.getVertex(neighbor);
 
-            // 添加原始道路结点
+            // add Origion Edge
             vertex.addOrigionEdge(new Node(neighbor, dis));
             neighborVertex.addOrigionEdge(new Node(vertexName, dis));
 
-            // 和邻居结点在同一个簇，则添加并相连，如果不同簇，则添加边界
+            // connect neighbor node
             if (clusterName.equals(neighborVertex.getClusterName())) {
                 cluster.addClusterLink(vertexName, neighbor, dis);
             } else {
                 cluster.addBorderLink(vertexName, neighbor, dis);
-                AhgVariable.clusters.get(neighborVertex.getClusterName())
+                AhgVariableUtil.getCluster(neighborVertex.getClusterName())
                         .addBorderLink(neighbor, vertexName, dis);
             }
         }
     }
-
 
     @Override
     public List getVertices() {
@@ -131,5 +113,20 @@ public class AhgVariableService implements IVariableService {
         return AhgVariable.clusters.size();
     }
 
-
+    /**
+     * build full true
+     */
+    public void buildFullTreeKey() {
+        Queue<String> queue = new LinkedList<>(AhgVariableUtil.getClusterKeySet());
+        while (!queue.isEmpty()) {
+            String clusterName = queue.poll();
+            String parentName;
+            // 当parentName存在，且clusters不存在parentName时，向上递归
+            while (StringUtils.hasLength(parentName = AhgVariableUtil.getParentClusterName(clusterName))
+                    && !AhgVariableUtil.containsClusterKey(parentName)) {
+                AhgVariableUtil.addCluster(parentName, null);
+                clusterName = parentName;
+            }
+        }
+    }
 }

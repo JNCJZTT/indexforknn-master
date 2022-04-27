@@ -5,8 +5,8 @@ import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.Car;
 import com.index.indexforknn.base.domain.Vertex;
 import com.index.indexforknn.base.service.api.IVariableService;
+import com.index.indexforknn.base.service.factory.ServiceFactory;
 import com.index.indexforknn.base.service.factory.SpringBeanFactory;
-import com.index.indexforknn.base.service.factory.VariableServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -16,37 +16,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 文件工具类
+ * File Util
  * 2022/2/12 zhoutao
  */
 @Slf4j
 @Component
 public class FileUtil {
-    // 最大缓冲区容量
     private final static int MAX_BUFFERED = 10000;
 
     private IVariableService variableService;
 
-    public void readFile() throws BaseException, IOException {
-        variableService = VariableServiceFactory.getVariableService();
+    /**
+     * read Files
+     */
+    public void readFiles() throws BaseException, IOException {
+        variableService = ServiceFactory.getVariableService();
 
-        log.info("开始读取节点文件");
         readVertexFile();
-        log.info("开始读取边文件");
         readEdgeFile();
-
-        log.info("开始初始化{}分布", GlobalVariable.DISTRIBUTE.name());
         List vertices = variableService.getVertices();
 
         SpringBeanFactory.getBean(DistributionUtil.class).initDistribute(vertices);
-        log.info("开始读取移动对象文件");
         readCarFile(vertices);
     }
 
-    /**
-     * 读取结点文件
-     */
-    public void readVertexFile() throws IOException, BaseException {
+    private void readVertexFile() throws IOException, BaseException {
         InputStreamReader read = new InputStreamReader(new FileInputStream(GlobalVariable.vertexUrl));
         BufferedReader bufferedReader = new BufferedReader(read);
 
@@ -56,16 +50,12 @@ public class FileUtil {
                 log.error("Read Vertex File Error! Line {} is Empty", i);
                 throw new BaseException("read File Exception");
             }
-            // 创建结点和簇
             variableService.buildVertex(i, clusterName);
         }
         read.close();
     }
 
-    /**
-     * 读取边文件
-     */
-    public void readEdgeFile() throws IOException, BaseException {
+    private void readEdgeFile() throws IOException, BaseException {
         InputStreamReader read = new InputStreamReader(new FileInputStream(GlobalVariable.edgeUrl));
         BufferedReader bufferedReader = new BufferedReader(read);
 
@@ -75,18 +65,13 @@ public class FileUtil {
                 log.error("Read Edge File Error! Line {} is Empty", i);
                 throw new BaseException("read File Exception");
             }
-
-            // 构建边
             String[] s = line.split("\\s+");
             variableService.buildEdge(i, s);
         }
         read.close();
     }
 
-    /**
-     * 读取移动对象文件
-     */
-    public void readCarFile(List vertices) throws IOException {
+    private void readCarFile(List vertices) throws IOException {
         GlobalVariable.CARS = new ArrayList<>();
 
         File file = new File(GlobalVariable.carUrl);
@@ -94,7 +79,7 @@ public class FileUtil {
             file.createNewFile();
             FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
             BufferedWriter writer = new BufferedWriter(fileWriter);
-            int bufferNum = 1;    //防止缓冲区满
+            int bufferNum = 1;
             for (int i = 0; i < GlobalVariable.CAR_NUM; i++) {
                 int activeName = DistributionUtil.getVertexName(),
                         activeDis = ((Vertex) vertices.get(activeName)).getRandomEdge().getDis();
@@ -104,7 +89,6 @@ public class FileUtil {
                                 .setActive(activeName)
                                 .setActiveDis(activeDis)
                 );
-                // optim: name可以直接按行
                 writer.write(i + " " + activeName + " " + activeDis);
                 writer.write("\r\n");
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 
 /**
- * 基本IndexDTO
+ * IndexDTO
  * 2022/3/12 zhoutao
  */
 @Data
@@ -28,4 +28,11 @@ public class IndexDTO {
     private int carNum;
 
     private int leastActiveNum;
+
+    private String timeType;
+
+    private boolean memory;
+
+    private String memoryType;
+
 }

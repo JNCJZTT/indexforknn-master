@@ -1,7 +1,7 @@
 package com.index.indexforknn.base.common.constants;
 
 /**
- * 异常信息
+ * Error msg
  * 2022/2/12 zhoutao
  */
 public interface ErrorConstants {

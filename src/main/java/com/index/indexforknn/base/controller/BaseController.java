@@ -1,19 +1,21 @@
 package com.index.indexforknn.base.controller;
 
+import com.index.indexforknn.ahg.service.AhgKnnService;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.service.GlobalVariableService;
 import com.index.indexforknn.base.service.IndexService;
 import com.index.indexforknn.base.service.dto.IndexDTO;
-import com.index.indexforknn.base.service.factory.IndexServiceFactory;
+import com.index.indexforknn.base.service.dto.KnnDTO;
+import com.index.indexforknn.base.service.dto.ResultDTO;
+import com.index.indexforknn.base.service.dto.UpdateDTO;
+import com.index.indexforknn.base.service.factory.ServiceFactory;
+import com.index.indexforknn.base.service.utils.DistributionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * TODO
+ * BaseController
  * 2022/3/20 zhoutao
  */
 @RestController
@@ -25,22 +27,44 @@ public class BaseController {
     @Autowired
     private GlobalVariableService globalVariableService;
 
+    @Autowired
+    private AhgKnnService ahgKnnService;
+
     /**
-     * 构建索引
+     * buildIndex
+     *
+     * @param index Index related parameters
      */
     @RequestMapping(value = "/build", method = RequestMethod.POST)
-    public String buildIndex(@RequestBody IndexDTO index) {
+    public ResultDTO buildIndex(@RequestBody IndexDTO index) {
         initGlobalVariable(index);
         indexService.buildIndex(index);
-        return "Success~!";
+        return indexService.buildResult(index);
+    }
+
+    @RequestMapping(value = "/knn", method = RequestMethod.POST)
+    public @ResponseBody
+    ResultDTO knn(@RequestBody KnnDTO knnDTO) {
+        globalVariableService.initKnnVariable(knnDTO);
+        if (knnDTO.getQueryName() > -1 && knnDTO.getQueryName() < GlobalVariable.VERTEX_NUM) {
+            ahgKnnService.knnSearch(knnDTO.getQueryName());
+        } else {
+            ahgKnnService.knnSearch(DistributionUtil.getVertexName());
+        }
+        return ahgKnnService.buildResult(knnDTO);
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public void update(@RequestBody UpdateDTO updateDTO) {
+        indexService.updateCar(updateDTO);
     }
 
     /**
-     * 初始化全局变量
+     * initGlobalVariable
      */
     private void initGlobalVariable(IndexDTO index) {
         globalVariableService.initGlobalVariable(index);
-        indexService = IndexServiceFactory.getIndexService(GlobalVariable.INDEX_TYPE);
+        indexService = ServiceFactory.getIndexService();
     }
 
 }

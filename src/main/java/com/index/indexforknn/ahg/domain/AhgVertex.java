@@ -1,22 +1,24 @@
 package com.index.indexforknn.ahg.domain;
 
+import com.index.indexforknn.ahg.common.status.AhgActiveStatus;
 import com.index.indexforknn.ahg.common.AhgConstants;
-import com.index.indexforknn.ahg.service.graph.AhgVariableService;
 import com.index.indexforknn.base.domain.Node;
 import com.index.indexforknn.base.domain.Vertex;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * TODO
+ * AhgVertex
  * 2022/2/10 zhoutao
  */
 @Getter
 @Setter
+@Slf4j
 public class AhgVertex extends Vertex {
 
     private boolean[] border;
@@ -25,8 +27,11 @@ public class AhgVertex extends Vertex {
 
     private AhgActive activeInfo;
 
-    // 虚拟路网
+    // virtual link
     private Set<Node> virtualLink = new HashSet<>();
+
+    // active node saved in cluster
+    private String activeClusterName;
 
     @Override
     public void setClusterName(String clusterName) {
@@ -36,34 +41,36 @@ public class AhgVertex extends Vertex {
         Arrays.fill(border, false);
     }
 
-    public void buildBorder() {
-        // 遍历邻居节点
-        for (Node node : getOrigionEdges()) {
-            AhgVertex neighborVertex = AhgVariable.INSTANCE.getVertex(node.getName());
-            String[] neighborClusterNames = neighborVertex.getClusterNames();
-            // 判断第 i 层是否是边界点
-            for (int i = 0; i < clusterNames.length && i < neighborClusterNames.length; i++) {
-                if (!clusterNames[i].equals(neighborClusterNames[i])) {
-                    setBorder(i);
-                    neighborVertex.setBorder(i);
-                }
-            }
-        }
+    /**
+     * isBorder
+     *
+     * @param layer layer
+     */
+    public boolean isBorder(int layer) {
+        return border[layer];
     }
 
-    public void setBorder(int level) {
-        border[level] = true;
-    }
-
-    public boolean isBorder(int level) {
-        return border[level];
-    }
-
-    public void buildVirtualMap(Set<Node> virtualLink) {
+    /**
+     * build virtual map(border)
+     *
+     * @param virtualLink       virtual edge
+     * @param activeClusterName current active clusterName
+     */
+    public void buildVirtualMap(Set<Node> virtualLink, String activeClusterName) {
+        this.activeClusterName = activeClusterName;
         this.virtualLink = virtualLink;
     }
 
-    public String getLayerClusterName(int layer) {
-        return clusterNames[layer];
+    /**
+     * isVirtualMapBorderNode
+     *
+     * @return return
+     */
+    public boolean isVirtualMapBorderNode() {
+        if (activeClusterName != null
+                && AhgVariable.clusters.get(activeClusterName).getStatus() == AhgActiveStatus.CURRENT_ACTIVE) {
+            return true;
+        }
+        return false;
     }
 }

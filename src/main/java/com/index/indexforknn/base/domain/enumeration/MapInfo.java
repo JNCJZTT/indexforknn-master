@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 包含的路网名称
+ * MapInfo
  * 2022/2/10 zhoutao
  */
 @AllArgsConstructor
 @Getter
 public enum MapInfo {
+    BJ(2_280_770),
     NY(264_346),
     COL(435_666),
     CAL(1_890_815),

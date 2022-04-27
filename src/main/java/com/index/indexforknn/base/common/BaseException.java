@@ -1,27 +1,27 @@
 package com.index.indexforknn.base.common;
 
 /**
- * TODO
+ * BaseException
  * 2022/2/12 zhoutao
  */
 public class BaseException extends Exception {
 
-    // 序列化UID
+    // serialVersionUID
     private static final long serialVersionUID = 8243127099991355146L;
 
     /**
-     * 构造异常
+     * build error
      *
-     * @param msg  异常讯息
+     * @param msg  errMsg
      **/
     public BaseException(String msg) {
         super(msg);
     }
 
     /**
-     * 构造异常
+     * build error
      *
-     * @param ex   异常来源
+     * @param ex   exception
      */
     public BaseException(Exception ex) {
         super(ex);
