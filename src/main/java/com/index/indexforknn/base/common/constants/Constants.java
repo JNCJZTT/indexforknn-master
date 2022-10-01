@@ -13,4 +13,6 @@ public interface Constants {
 
     // car speed
     int carSpeed = 60_000 / 3600;
+
+    String CLUSTER_NAME_SUFFIX = ",";
 }

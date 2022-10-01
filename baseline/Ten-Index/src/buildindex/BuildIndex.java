@@ -12,14 +12,14 @@ import java.util.*;
 public class BuildIndex {
     //打开文件--------------------------------------------------------------------------------------------------------------
 
-    private String VertexUrl = "/file/map/", EdgeUrl = "/file/map/";
+    private String VertexUrl = "/Users/zhoutao/Documents/kNNIndexData/", EdgeUrl = "/Users/zhoutao/Documents/kNNIndexData/";
 
     public static HashMap<Integer, Vertex> AllVertices = new HashMap<Integer, Vertex>();      //节点
     public static HashSet<Integer> AllNames = new HashSet<>();
     public Stack<Integer> TreeStack;                                            //树栈
     public static HashMap<HashSet<Integer>, Integer> TreeNode = new HashMap<>();
     public static Vertex Root;                                                  //根节点
-    public static Integer K = 10;
+    public static Integer K = 50;
 
     private int VertexSize = 0;
     public static Random random = new Random();
@@ -28,15 +28,18 @@ public class BuildIndex {
     private int CarSize = 20000;
     private List<Car> Cars = new ArrayList<Car>(CarSize);                       //移动对象数量
     long UpdateTime = 0;
+    private String map;
 
 
     public BuildIndex(int CarSize, String map) {
         this.CarSize = CarSize;
         VertexUrl += map;
         EdgeUrl += map;
-
+        this.map = map;
         VertexUrl += ("/USA-road-d." + map + ".co");
         EdgeUrl += ("/USA-road-d." + map + ".gr");
+        System.out.println("VertexUrl:" + VertexUrl);
+        System.out.println("EdgeUrl:" + EdgeUrl);
 
     }
 
@@ -50,12 +53,16 @@ public class BuildIndex {
         BuildTree();
 
         BuildCar();
-
-        // TestBuildCar();
+        Integer maxTreeLevel = 0;
+        for (Vertex vertex : AllVertices.values()) {
+            maxTreeLevel = Math.max(maxTreeLevel, vertex.TreeLevel);
+        }
+        System.out.println(map + " maxLayer=" + maxTreeLevel);
 
         InitValue();
         long BuildEnd = System.currentTimeMillis();        //结束构造
-        return (BuildEnd - BuildStart) / 1000 ;
+        return (BuildEnd - BuildStart) / 1000;
+
     }
 
     //构造索引-------------------------------------------------------------------------------
@@ -63,7 +70,7 @@ public class BuildIndex {
     private final void BuildVertex() throws IOException {
 
         //打开顶点文件
-        InputStreamReader read = new InputStreamReader(this.getClass().getResourceAsStream(VertexUrl));
+        InputStreamReader read = new InputStreamReader(new FileInputStream(VertexUrl));
         BufferedReader bufferedReader = new BufferedReader(read);
         String lineText = null;                                             //按行读
         while ((lineText = bufferedReader.readLine()) != null) {
@@ -87,7 +94,7 @@ public class BuildIndex {
 
 
         //判断文件是否存在
-        InputStreamReader read = new InputStreamReader(this.getClass().getResourceAsStream(EdgeUrl));
+        InputStreamReader read = new InputStreamReader(new FileInputStream(EdgeUrl));
         BufferedReader bufferedReader = new BufferedReader(read);
         String lineText = null;
         boolean times = true;
@@ -193,22 +200,6 @@ public class BuildIndex {
         }
         long CarEnd = System.currentTimeMillis();
         UpdateTime = CarEnd - CarBegin;
-    }
-
-
-    //测试是否所有的Link都是自己的父亲节点
-    private final void TestParent() {
-        for (int i = 1; i <= VertexSize; i++) {
-            Vertex v = AllVertices.get(i);
-//            for(Vnode vn:v.GetLink()){
-//                if(!vn.name.equals(v.VertexName)){
-//                    if(!v.IsAncestor(vn.name)){
-//                        System.out.println("vn.name="+vn.name+"v.name="+v.VertexName);
-//                    }
-//                }
-//            }
-        }
-        System.out.println("测试结束");
     }
 
     //返回一个随机的查询点名字---------------------------------------------------------

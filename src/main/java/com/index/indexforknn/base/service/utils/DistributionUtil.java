@@ -1,7 +1,7 @@
 package com.index.indexforknn.base.service.utils;
 
 import com.index.indexforknn.base.domain.GlobalVariable;
-import com.index.indexforknn.base.domain.Vertex;
+import com.index.indexforknn.base.domain.api.Vertex;
 import com.index.indexforknn.base.domain.enumeration.Distribution;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

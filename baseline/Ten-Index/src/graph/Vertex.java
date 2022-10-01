@@ -7,7 +7,7 @@ import static buildindex.BuildIndex.*;
 public class Vertex {
     public Integer VertexName;                                              //节点的名字
     public int Degree = 0;                                                  //度数
-    private int TreeLevel = -1;                                             //层数
+    public int TreeLevel = -1;                                             //层数
     public List<Vnode> Nodes = new ArrayList<>();                         //真实路网节点
 
     private boolean IsRoot = false;                                         //是否是根节点

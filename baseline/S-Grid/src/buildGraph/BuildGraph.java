@@ -8,11 +8,7 @@ import java.util.*;
 import static common.Constants.*;
 import static common.Utils.getVertexNum;
 
-/**
- * @author: zhoutao
- * @since: 2021/10/31 3:04 下午
- * @description: 生成edgeFile和saveClusterFile
- */
+
 public class BuildGraph {
     public BuildGraph(String map, int clusterSize) throws IOException {
 

@@ -4,7 +4,7 @@ import com.index.indexforknn.base.common.constants.Constants;
 import com.index.indexforknn.base.domain.Car;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.Node;
-import com.index.indexforknn.base.domain.Vertex;
+import com.index.indexforknn.base.domain.api.Vertex;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
 import com.index.indexforknn.base.service.api.IBaseService;
 import com.index.indexforknn.base.service.api.IVariableService;
@@ -31,7 +31,7 @@ public abstract class CarService implements IBaseService {
     public void batchUpdateRandomCarLocation(UpdateDTO updateDTO) {
         int carNum = updateDTO.getUpdateNum();
         initUpdateDTO(updateDTO);
-        List<Vertex> vertices = (List<Vertex>) variableService.getVertices();
+        List<Vertex> vertices =GlobalVariable.variable.getVertices();
 
         for (int i = 0; i < carNum; i++) {
             Car car = GlobalVariable.CARS.get(GlobalVariable.RANDOM.nextInt(GlobalVariable.CAR_NUM));

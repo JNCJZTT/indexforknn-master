@@ -1,12 +1,12 @@
 package com.index.indexforknn.base.controller;
 
-import com.index.indexforknn.ahg.service.AhgKnnService;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.service.GlobalVariableService;
-import com.index.indexforknn.base.service.IndexService;
+import com.index.indexforknn.base.service.api.IKnnService;
+import com.index.indexforknn.base.service.api.IndexService;
 import com.index.indexforknn.base.service.dto.IndexDTO;
 import com.index.indexforknn.base.service.dto.KnnDTO;
-import com.index.indexforknn.base.service.dto.ResultDTO;
+import com.index.indexforknn.base.service.dto.result.ResultDTO;
 import com.index.indexforknn.base.service.dto.UpdateDTO;
 import com.index.indexforknn.base.service.factory.ServiceFactory;
 import com.index.indexforknn.base.service.utils.DistributionUtil;
@@ -27,8 +27,7 @@ public class BaseController {
     @Autowired
     private GlobalVariableService globalVariableService;
 
-    @Autowired
-    private AhgKnnService ahgKnnService;
+    private IKnnService knnService;
 
     /**
      * buildIndex
@@ -46,12 +45,13 @@ public class BaseController {
     public @ResponseBody
     ResultDTO knn(@RequestBody KnnDTO knnDTO) {
         globalVariableService.initKnnVariable(knnDTO);
+        knnService = ServiceFactory.getKnnService();
         if (knnDTO.getQueryName() > -1 && knnDTO.getQueryName() < GlobalVariable.VERTEX_NUM) {
-            ahgKnnService.knnSearch(knnDTO.getQueryName());
+            knnService.knnSearch(knnDTO.getQueryName());
         } else {
-            ahgKnnService.knnSearch(DistributionUtil.getVertexName());
+            knnService.knnSearch(DistributionUtil.getVertexName());
         }
-        return ahgKnnService.buildResult(knnDTO);
+        return knnService.buildResult(knnDTO);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)

@@ -2,12 +2,14 @@ package start;
 
 import buildindex.BuildIndex;
 import graph.Car;
+import graph.Vertex;
 import graph.Vnode;
 import search.DijkstraSearch;
 import search.Search;
 
 import java.awt.*;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
 
@@ -19,15 +21,15 @@ public class Start {
 //        System.gc();
 //        long memoryBefore = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         // long startMem = Runtime.getRuntime().freeMemory(); // 开始Memory
-        String maps[]={"NY","COL","CAL","E"};
-        for(String map:maps){
-            long BuildTimeSum=0;
-            for(int i=0;i<times;i++){
+        String maps[] = {"NY", "COL", "CAL", "E"};
+        for (String map : maps) {
+            long BuildTimeSum = 0;
+            for (int i = 0; i < times; i++) {
                 System.gc();
                 BuildIndex b = new BuildIndex(600000, "COL");
-                BuildTimeSum+=b.Run();
+                BuildTimeSum += b.Run();
             }
-            BuildTimeSum/=times;
+            BuildTimeSum /= times;
             System.out.println("构建平均时间为：" + String.format("%.2f 秒", (float) BuildTimeSum));
         }
 
@@ -38,11 +40,11 @@ public class Start {
     }
 
     private static void TestkNN() throws IOException {
-        String maps[]={"NY","COL","CAL","E"};
-        for(String map:maps){
+        String maps[] = {"NY", "COL", "CAL", "E"};
+        for (String map : maps) {
             BuildIndex b = new BuildIndex(600000, map);
             b.Run();
-            System.out.println("地图为："+map);
+            System.out.println("地图为：" + map);
             int[] KArray = {10, 20, 30, 40, 50};
             long AveTime = 0;
             for (int i = 0; i < KArray.length; i++) {
@@ -70,32 +72,77 @@ public class Start {
     }
 
     private static void TestUpdate() throws IOException {
-        String maps[]={"NY","COL","CAL","E"};
-        for(int k=0;k<maps.length;k++) {
-            String map=maps[k];
-            System.out.println("map="+map);
+        String maps[] = {"NY", "COL", "CAL", "E"};
+        for (int k = 0; k < maps.length; k++) {
+            String map = maps[k];
+            System.out.println("map=" + map);
             BuildIndex b = new BuildIndex(600000, map);
             b.Run();
 
             System.out.println("构建完成");
-            int times = 50 ;
+            int times = 50;
             long AveTime = 0;
 
-                int num = (int)(600000*0.25);
+            int num = (int) (600000 * 0.25);
 
-                for (int j = 0; j < times; j++) {
-                    b.UpdateCar(num);
-                    AveTime += b.GetUpdateTime();
-                }
-                System.out.println("更新" + num + "个移动对象耗费的时间=" + AveTime / times + "毫秒");
+            for (int j = 0; j < times; j++) {
+                b.UpdateCar(num);
+                AveTime += b.GetUpdateTime();
+            }
+            System.out.println("更新" + num + "个移动对象耗费的时间=" + AveTime / times + "毫秒");
 
         }
     }
 
+    private static final int SAVE_DECIMAL_PLACES = 2;
+
     public static void main(String[] args) throws IOException {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        nf.setMaximumFractionDigits(SAVE_DECIMAL_PLACES);
+        Scanner sc = new Scanner(System.in);
+        String maps[] = {"NY"};
+        for (String map : maps) {
+            BuildIndex b = new BuildIndex(20000, map);
+            b.Run();
+
+            int maxName = 1, minName = 1;
+            for (Vertex vertex : AllVertices.values()) {
+                if (vertex.TreeLevel == 600) {
+                    maxName = vertex.VertexName;
+                }
+                if (vertex.TreeLevel == 10) {
+                    minName = 10;
+                }
+            }
+            System.out.println("*******************MAX_TIME******************");
+            for (int i = 0; i < 50; i++) {
+                Search search = new Search(maxName, "s");
+                System.out.println(nf.format(search.time / 1000) + "毫秒");
+
+            }
+            System.out.println("*******************MIN_TIME******************");
+            for (int i = 0; i < 50; i++) {
+                Search search = new Search(minName, "s");
+                System.out.println(nf.format(search.time / 1000) + "毫秒");
+
+            }
+//            while (true) {
+//                int QueryName = b.GetRandomQueryName();
+//                System.out.println(AllVertices.get(QueryName).TreeLevel);
+//                Search search = new Search(QueryName, "t");
+//                System.out.println(nf.format(search.time / 1000) + "毫秒");
+//                System.out.println("请输入：");
+//                int x = sc.nextInt();
+//                if (x == -1) {
+//                    break;
+//                }
+//            }
+        }
+
+
 //        TestBuild(1);
 //            TestUpdate();
-        TestkNN();
+//        TestkNN();
 
 //        TestUpdate(600000,"COL");
 //        while(true)

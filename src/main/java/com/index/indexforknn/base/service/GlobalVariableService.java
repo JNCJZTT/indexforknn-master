@@ -1,15 +1,13 @@
 package com.index.indexforknn.base.service;
 
-import com.index.indexforknn.ahg.domain.AhgVariable;
 import com.index.indexforknn.base.domain.GlobalVariable;
+import com.index.indexforknn.base.domain.api.factory.VariableFactory;
 import com.index.indexforknn.base.domain.enumeration.Distribution;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
 import com.index.indexforknn.base.domain.enumeration.MapInfo;
 import com.index.indexforknn.base.service.dto.IndexDTO;
 import com.index.indexforknn.base.service.dto.KnnDTO;
-import com.index.indexforknn.base.service.knn.DijkstraService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -33,6 +31,8 @@ public class GlobalVariableService {
         GlobalVariable.VERTEX_NUM = GlobalVariable.MAP_INFO.getSize();
         GlobalVariable.DISTRIBUTE = Distribution.valueOf(index.getDistribution());
         GlobalVariable.CAR_NUM = index.getCarNum();
+        GlobalVariable.DIGIT = String.valueOf(index.getBranch()).length();
+        GlobalVariable.variable = VariableFactory.getVariable();
         // init file path
         initFileUrl();
     }

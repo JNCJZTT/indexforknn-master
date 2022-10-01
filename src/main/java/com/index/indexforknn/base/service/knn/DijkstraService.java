@@ -3,7 +3,7 @@ package com.index.indexforknn.base.service.knn;
 import com.index.indexforknn.base.domain.Car;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.Node;
-import com.index.indexforknn.base.domain.Vertex;
+import com.index.indexforknn.base.domain.api.Vertex;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

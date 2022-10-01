@@ -2,7 +2,8 @@ package com.index.indexforknn.base.service.factory;
 
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
-import com.index.indexforknn.base.service.IndexService;
+import com.index.indexforknn.base.service.api.IndexService;
+import com.index.indexforknn.base.service.api.IKnnService;
 import com.index.indexforknn.base.service.api.IVariableService;
 import com.index.indexforknn.base.service.graph.CarService;
 
@@ -19,6 +20,8 @@ public class ServiceFactory {
     private static Map<IndexType, IndexService> indexServiceFactory = new HashMap<>();
 
     private static Map<IndexType, IVariableService> variableServiceFactory = new HashMap<>();
+
+    private static Map<IndexType, IKnnService> knnServiceFactory = new HashMap<>();
 
 
     public static void register(IndexType indexType, CarService carService) {
@@ -39,7 +42,15 @@ public class ServiceFactory {
         }
     }
 
-    public static <T> T getVariableService() {return (T) variableServiceFactory.get(GlobalVariable.INDEX_TYPE);}
+    public static void register(IndexType indexType, IKnnService knnService) {
+        if (indexType != null && !knnServiceFactory.containsKey(indexType)) {
+            knnServiceFactory.put(indexType, knnService);
+        }
+    }
+
+    public static <T> T getVariableService() {
+        return (T) variableServiceFactory.get(GlobalVariable.INDEX_TYPE);
+    }
 
     public static <T> T getIndexService() {
         return (T) indexServiceFactory.get(GlobalVariable.INDEX_TYPE);
@@ -47,5 +58,9 @@ public class ServiceFactory {
 
     public static <T> T getCarService() {
         return (T) carServiceFactory.get(GlobalVariable.INDEX_TYPE);
+    }
+
+    public static <T> T getKnnService() {
+        return (T) knnServiceFactory.get(GlobalVariable.INDEX_TYPE);
     }
 }

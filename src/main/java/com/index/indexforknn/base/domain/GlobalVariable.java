@@ -1,10 +1,10 @@
 package com.index.indexforknn.base.domain;
 
 import com.index.indexforknn.base.common.constants.Constants;
+import com.index.indexforknn.base.domain.api.Variable;
 import com.index.indexforknn.base.domain.enumeration.Distribution;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
 import com.index.indexforknn.base.domain.enumeration.MapInfo;
-import com.index.indexforknn.base.service.dto.IndexDTO;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -48,6 +48,10 @@ public class GlobalVariable {
 
     // cars
     public static List<Car> CARS;
+
+    public static int DIGIT;
+
+    public static Variable variable;
 
     public static String vertexUrl = Constants.BASE_URL + "{0}/USA-road-d.{0}.branch-{1}.avg-{2}.txt";
 

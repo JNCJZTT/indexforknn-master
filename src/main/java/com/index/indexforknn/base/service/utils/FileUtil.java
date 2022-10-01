@@ -3,7 +3,7 @@ package com.index.indexforknn.base.service.utils;
 import com.index.indexforknn.base.common.BaseException;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.Car;
-import com.index.indexforknn.base.domain.Vertex;
+import com.index.indexforknn.base.domain.api.Vertex;
 import com.index.indexforknn.base.service.api.IVariableService;
 import com.index.indexforknn.base.service.factory.ServiceFactory;
 import com.index.indexforknn.base.service.factory.SpringBeanFactory;
@@ -34,7 +34,7 @@ public class FileUtil {
 
         readVertexFile();
         readEdgeFile();
-        List vertices = variableService.getVertices();
+        List vertices = GlobalVariable.variable.getVertices();
 
         SpringBeanFactory.getBean(DistributionUtil.class).initDistribute(vertices);
         readCarFile(vertices);

@@ -74,7 +74,8 @@ public class Start {
 
     public static void main(String[] args) throws IOException {
 
-        TestUpdate(20000,"COL");
+        TestUpdate(20000,"NY");
+
 
 //        while(true)
 //        {
