@@ -43,8 +43,13 @@ public class GlobalVariableService {
     private void initFileUrl() {
         String mapName = GlobalVariable.MAP_INFO.name();
         // USA-road-d.NY.branch-4.avg-50.txt
-        GlobalVariable.vertexUrl = MessageFormat.format(GlobalVariable.vertexUrl,
-                mapName, GlobalVariable.BRANCH, GlobalVariable.SUB_GRAPH_SIZE);
+        if (mapName.equals("SIM")||mapName.equals("ER")){
+            GlobalVariable.vertexUrl = Constants.BASE_URL + "{0}/USA-road-d.{0}.co";
+            GlobalVariable.vertexUrl = MessageFormat.format(GlobalVariable.vertexUrl , mapName);
+        }else {
+            GlobalVariable.vertexUrl = MessageFormat.format(GlobalVariable.vertexUrl,
+                    mapName, GlobalVariable.BRANCH, GlobalVariable.SUB_GRAPH_SIZE);
+        }
         // NY_Edge.txt
         GlobalVariable.edgeUrl = MessageFormat.format(GlobalVariable.edgeUrl, mapName);
         // CarFile.NY.CarNum-5,000.Distribute-RANDOM.txt
