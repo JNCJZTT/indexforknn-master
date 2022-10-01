@@ -43,8 +43,9 @@ public class GlobalVariableService {
      */
     private void initFileUrl() {
         String mapName = GlobalVariable.MAP_INFO.name();
+        String indexName = GlobalVariable.INDEX_TYPE.name();
         // USA-road-d.NY.branch-4.avg-50.txt
-        if (mapName.equals("SIM")||mapName.equals("ER")){
+        if (indexName.equals("SIM")||indexName.equals("ER")){
             GlobalVariable.vertexUrl = Constants.BASE_URL + "{0}/USA-road-d.{0}.co";
             GlobalVariable.vertexUrl = MessageFormat.format(GlobalVariable.vertexUrl , mapName);
         }else {
