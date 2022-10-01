@@ -1,5 +1,6 @@
 package com.index.indexforknn.base.service;
 
+import com.index.indexforknn.base.common.constants.Constants;
 import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.api.factory.VariableFactory;
 import com.index.indexforknn.base.domain.enumeration.Distribution;
