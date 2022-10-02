@@ -33,6 +33,7 @@ public class GlobalVariableService {
         GlobalVariable.CAR_NUM = index.getCarNum();
         GlobalVariable.DIGIT = String.valueOf(index.getBranch()).length();
         GlobalVariable.variable = VariableFactory.getVariable();
+        GlobalVariable.K = index.getK();
         // init file path
         initFileUrl();
     }

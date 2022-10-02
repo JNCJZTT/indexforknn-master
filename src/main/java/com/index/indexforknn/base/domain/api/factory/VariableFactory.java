@@ -5,6 +5,7 @@ import com.index.indexforknn.base.domain.GlobalVariable;
 import com.index.indexforknn.base.domain.api.Variable;
 import com.index.indexforknn.base.domain.enumeration.IndexType;
 import com.index.indexforknn.sgrid.domain.SGridVariable;
+import com.index.indexforknn.tenstar.domain.TenStarVariable;
 import com.index.indexforknn.vtree.domain.VtreeVariable;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class VariableFactory {
         variableFactory.put(IndexType.AHG, AhgVariable.INSTANCE);
         variableFactory.put(IndexType.SGRID, SGridVariable.INSTANCE);
         variableFactory.put(IndexType.VTREE, VtreeVariable.INSTANCE);
+        variableFactory.put(IndexType.TENSTAR, TenStarVariable.INSTANCE);
     }
 
     public static Variable getVariable() {

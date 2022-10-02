@@ -35,4 +35,6 @@ public class IndexDTO {
 
     private String memoryType;
 
+    private int K;
+
 }

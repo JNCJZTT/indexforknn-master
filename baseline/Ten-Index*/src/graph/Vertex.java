@@ -163,7 +163,6 @@ public class Vertex {
         this.IsTreeNode=true;
         this.LinkNodes.put(this.VertexName,new LinkNode((this.VertexName)));   //新建自身
         vp.SetSon(this.VertexName);                                       //父亲节点修改为非叶子节点 且添加孩子节点
-
     }
 
     //添加孩子
