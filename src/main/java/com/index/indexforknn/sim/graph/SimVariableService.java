@@ -28,11 +28,9 @@ public class SimVariableService implements IVariableService {
 
     @Override
     public void buildVertex(int vertexName,String line){
-        int i = 0;
         String[] s=line.split(" ");
-        if (s[0]=="v"){i=2;}
-        double x = Integer.parseInt(s[i]);
-        double y = Integer.parseInt(s[i+1]);
+        double x = Integer.parseInt(s[1]);
+        double y = Integer.parseInt(s[2]);
 
         if (SimVariable.INSTANCE.getXMax()<x){
             SimVariable.INSTANCE.setXMax(x);
