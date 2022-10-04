@@ -1,31 +1,7 @@
--Datasets
+We implement ODIN and the baselines based on the Spring and the MVC architecture, which eases the evaluation of various approaches with the same parameters and datasets. 
 
-Using two files to build a AMT-Index.
 
-1. City_Edge.txt : each row represents the adjacenct list for each vertex with the following format：
+The codes of ODIN and baselines are divided into two packages, “src/main/java/ODIN” and “src/main/java/Baseline”. The driver class of our proposal is in “src/main/java/ODIN/ODINApplication.java”. The  folder “baseline” includes the codes of baselines. The driver class of starting one baseline is “src/main/java/Baseline/BaslinApplication.java”. After the start-up, please input the baseline name (i.e., SGrid, ERkNN, SIMkNN, VTtree, or TenIndex) to start the corresponding baseline method. You can set the values of parameters that need to be evaluated in experiments in the  driver class no matter ODIN or baseline methods.
 
-  ```
-  neighborName1,dis1,neighborName2,dis2....
-  ```
-2. USA-road-d.City.branch-x.avg-y : x represents the branch number m  and y refers to the maximum threshold w.r.t. the number of vertices in each leaf subgraph. Each row represents the IDs of subgraphs each vertex belongs to, where the subgrahs are organized with a M-ary tree. The following row is the first row that contains the IDs of subgraphs containing vertex 1 (ID of the vertex being 1), which implies that the vertex 1 is assigned to the subgraph 1 (ID of the subgraph being 1) in the first division. In the second division, vertex 1 is the assigned to the second child subgraph of subgraph 1. The division iteratively proceeds until vertex 1 is contained by a leaf subgraph.
-  ```
-  1,2,1,2
-  ```
-The data of NY has been prepared in indexforknn/data/NY
 
-- Operating environment: Java Jdk17
-
-- Baseline codes: codes of baselines are in the package "indexforknn-master/baseline"
-
-- AMT-Index: Package "indexforknn-master/src/man/java/com/index/indexforknn" contains the code of our solution. This package includes two packages "amt" and "base", where "amt" contains the code of the AMT-index while "base" stores the onfiguration messages and some initialization operations about AMT-Index.
-
-- Start:
-
-  Start the springboot by running the driver class: "src/main/java/com/index/indexforknn/IndexforknnApplication.java"
-
-  Use the interface in base/controller/BaseController through postman to start index building, index maintenance and processing kNN queries, where the urls are http://localhost:8888/build , http://localhost:8888/knn, and http://localhost:8888/update respectively. 
-  
-
-  
-
-  
+The folder “data” includes all datasets relied by each algorithm. Each sub-folder of “data” contains the datasets corresponding to each road network. Here, we take NY as an example to explain the meanings of datasets on each sub-folder of “data”. In particular, “original-NY.txt” is the graph of the road network NY that is organized with the adjacent list, “original-NY.co” is the set of coordinates of all vertices in NY, and “METIS-‘RN’-4branches-300.txt” is the hierarchical partitioned subgraphs of NY using METIS, where the number of branches is 4 (m=4) and the size threshold of each subgraph is 300 (z=300). Other hierarchical partitioned subgraphs with different branches and size thresholds of subgrahps can be obtained by using the partitioning script of METIS in the folder “metis”, where the input graphs of the script are available in “metis/inputGraphs”.
